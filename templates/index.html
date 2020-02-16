@@ -2,8 +2,45 @@
 <html>
     <head>
         <title>Snaccbot</title>
+        <style>
+         table, th, td {
+             border: 1px solid black;
+         }
+        </style>
+        <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+        <script src="/static/main.js"></script>
     </head>
     <body>
         <h1>Snaccbot</h1>
+        <p>Current status:
+            {% if cur_request %}
+            {% if cur_request['complete'] %}
+            coming back from {{ cur_request['node'] }}
+            <button id="mark-home">mark home</button>
+            {% else %}
+            delivering {{ cur_request['item'] }} to {{ cur_request['node'] }}
+            <button class="mark-complete" data-id={{ cur_request['_id'] }}>mark complete</button>
+            {% endif %}
+            {% else %}
+            at home base
+            {% endif %}
+        </p>
+        <table>
+            <tr>
+                <th>Location</th>
+                <th>Item</th>
+                <th>Ready?</th>
+            </tr>
+            {% for request in requests %}
+            <tr>
+                <th>{{ request['node'] }}</th>
+                <th>{{ request['item'] }}</th>
+                <th><button class="send" data-id={{ request['_id'] }} {% if cur_request %}disabled{% endif %}>send</button></th>
+            </tr>
+            {% endfor %}
+        </table>
     </body>
 </html>
