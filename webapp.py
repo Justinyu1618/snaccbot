@@ -4,6 +4,8 @@ from bson.objectid import ObjectId
 import requests
 
 app = Flask(__name__)
+app.config.from_json('config.json')
+
 client = MongoClient('localhost', 27017)
 db_requests = client['snaccbot']['requests']
 
@@ -71,7 +73,7 @@ def snaccbot_node():
 
 def send_message(message, channel):
     return requests.post('https://slack.com/api/chat.postMessage', data={
-        'token': 'xoxb-4087984309-942877102067-aTf8lJIHrsb9E7OBCMF0ERKI',
+        'token': app.config['SLACKBOT_TOKEN'],
         'channel': channel,
         'text': message
     })
